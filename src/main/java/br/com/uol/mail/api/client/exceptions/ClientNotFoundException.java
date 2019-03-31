@@ -9,15 +9,7 @@ public class ClientNotFoundException extends Exception {
 
 	private static final String MESSAGE = "Client with id '%d' not found";
 	
-	public ClientNotFoundException() {
-		super();
-	}
-	
 	public ClientNotFoundException(Long clientId) {
 		super(String.format(MESSAGE, clientId));
-	}
-	
-	public ClientNotFoundException(String message) {
-		super(message);
 	}
 }
