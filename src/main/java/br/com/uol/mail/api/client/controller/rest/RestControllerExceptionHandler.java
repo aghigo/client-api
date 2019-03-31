@@ -12,6 +12,9 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import com.google.gson.JsonObject;
 
+/**
+ * Component responsible for handling exceptions thrown by Rest Controllers
+ */
 @ControllerAdvice
 public class RestControllerExceptionHandler extends ResponseEntityExceptionHandler {	
 	@ExceptionHandler(value = { ResponseStatusException.class })

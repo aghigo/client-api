@@ -9,35 +9,54 @@ import br.com.uol.mail.api.client.exceptions.ClientNotFoundException;
 
 /**
  * Defines business rules for clients
+ * 
+ * @see ClientDTO
+ * @see Client
  */
 @Service
 public interface ClientService {
 	/**
 	 * Get a list with all clients available
-	 * @return List with all clients available. Empty list, if none.
+	 * @see ClientDTO
+	 * @see Client
+	 * 
+	 * @return List with all clients available. An empty list, none.
 	 */
 	List<ClientDTO> getAllClients();
 	
 	/**
 	 * Get a specific Client based on its unique Id
+	 * @see ClientDTO
+	 * @see Client
+	 * 
 	 * @return Client instance with the provided Id
+	 * 
 	 * @throws ClientNotFoundException if the client was not found
 	 */
-	ClientDTO getClientById() throws ClientNotFoundException;
+	ClientDTO getClientById(Long id) throws ClientNotFoundException;
+	
+	/**
+	 * Creates a new client
+	 * 
+	 * @param client data of the client to create
+	 */
+	void createClient(ClientDTO request);
 	
 	/**
 	 * Updates a client with a specific id
 	 * 
 	 * @param id the id of the client to update 
-	 * @param client client data to update
+	 * @param request client data to update
 	 * 
 	 * @throws ClientNotFoundException if the client was not found
 	 */
-	void updateClientById(Long id, ClientDTO client) throws ClientNotFoundException;
+	void updateClientById(Long id, ClientDTO request) throws ClientNotFoundException;
 	
 	/**
 	 * Deletes a client with a specific id
+	 * 
 	 * @param id the id of the client to be removed
+	 * 
 	 * @throws ClientNotFoundException if the client was not found
 	 */
 	void deleteClientById(Long id) throws ClientNotFoundException;

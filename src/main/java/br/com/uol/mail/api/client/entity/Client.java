@@ -12,6 +12,9 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * Client domain entity
+ */
 @Builder
 @Getter
 @Setter
