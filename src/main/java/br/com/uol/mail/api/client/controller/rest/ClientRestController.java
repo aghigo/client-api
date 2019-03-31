@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import br.com.uol.mail.api.client.domain.dto.ClientDTO;
+import br.com.uol.mail.api.client.entity.Client;
+import br.com.uol.mail.api.client.exceptions.ClientAlreadyExistsException;
 import br.com.uol.mail.api.client.exceptions.ClientNotFoundException;
 import br.com.uol.mail.api.client.repository.ClientRepository;
 import br.com.uol.mail.api.client.service.ClientService;
@@ -65,8 +67,12 @@ public class ClientRestController {
 	
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<Object> createClient(@RequestBody @Valid ClientDTO requestBody) {
-		this.clientService.createClient(requestBody);
-		return ResponseEntity.status(HttpStatus.CREATED).build();
+		try {
+			this.clientService.createClient(requestBody);
+			return ResponseEntity.status(HttpStatus.CREATED).build();
+		} catch (ClientAlreadyExistsException e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+		}
 	}
 	
 	@PutMapping(value = "/{clientId}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)

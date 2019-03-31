@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import br.com.uol.mail.api.client.domain.dto.ClientDTO;
+import br.com.uol.mail.api.client.entity.Client;
+import br.com.uol.mail.api.client.exceptions.ClientAlreadyExistsException;
 import br.com.uol.mail.api.client.exceptions.ClientNotFoundException;
 
 /**
@@ -39,8 +41,10 @@ public interface ClientService {
 	 * Creates a new client
 	 * 
 	 * @param client data of the client to create
+	 * 
+	 * @throws ClientAlreadyExistsException if the client to be created already exists
 	 */
-	void createClient(ClientDTO request);
+	void createClient(ClientDTO request) throws ClientAlreadyExistsException;
 	
 	/**
 	 * Updates a client with a specific id

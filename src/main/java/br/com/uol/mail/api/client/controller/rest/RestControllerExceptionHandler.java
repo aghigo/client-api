@@ -37,6 +37,5 @@ public class RestControllerExceptionHandler extends ResponseEntityExceptionHandl
 		responseBody.addProperty("message", ex.getMessage());
 		responseBody.addProperty("timestamp", new Date().getTime());
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).contentType(MediaType.APPLICATION_JSON_UTF8).body(responseBody.toString());
-		
 	}
 }

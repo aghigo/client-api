@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.uol.mail.api.client.domain.dto.ClientDTO;
 import br.com.uol.mail.api.client.entity.Client;
+import br.com.uol.mail.api.client.exceptions.ClientAlreadyExistsException;
 import br.com.uol.mail.api.client.exceptions.ClientNotFoundException;
 import br.com.uol.mail.api.client.repository.ClientRepository;
 
@@ -48,7 +49,10 @@ public class ClientServiceImpl implements ClientService {
 	}
 
 	@Override
-	public void createClient(ClientDTO request) {
+	public void createClient(ClientDTO request) throws ClientAlreadyExistsException {
+		if(this.clientRepository.findByEmail(request.getEmail()).isPresent()) {
+			throw new ClientAlreadyExistsException("Client with e-mail address '" + request.getEmail() + "' already exists");
+		}
 		Client client = Client.builder().name(request.getName()).email(request.getEmail()).age(request.getAge()).build();
 		this.clientRepository.save(client);
 	}
