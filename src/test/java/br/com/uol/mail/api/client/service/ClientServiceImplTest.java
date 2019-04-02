@@ -3,6 +3,7 @@ package br.com.uol.mail.api.client.service;
 import static org.mockito.Mockito.times;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,8 +48,8 @@ public class ClientServiceImplTest {
 	
 	@Test
 	public void getAllClients_shouldReturnListOfClients() {
-		Client johnDoe = new Client(1L, "john doe", "john.doe@gmail.com", 20);
-		Client client1 = new Client(1L, "test", "test@gmail.com", 32);
+		Client johnDoe = new Client(1L, "john doe", "john.doe@gmail.com", 20, new Date(), null);
+		Client client1 = new Client(1L, "test", "test@gmail.com", 32, new Date(), null);
 		this.mockedClients = new ArrayList<>();
 		this.mockedClients.add(johnDoe);
 		this.mockedClients.add(client1);
@@ -86,7 +87,7 @@ public class ClientServiceImplTest {
 	
 	@Test
 	public void getClientById_withClientFound_shouldReturnClient() throws ClientNotFoundException {
-		Client johnDoe = new Client(1L, "john doe", "john.doe@gmail.com", 20);
+		Client johnDoe = new Client(1L, "john doe", "john.doe@gmail.com", 20, new Date(), null);
 		Mockito.doReturn(Optional.of(johnDoe)).when(this.clientRepository).findById(Mockito.anyLong());
 		ClientDTO client = this.service.getClientById(1L);
 		Assert.assertNotNull(client);

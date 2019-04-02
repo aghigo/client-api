@@ -1,4 +1,4 @@
-package br.com.uol.mail.api.client.dao;
+package br.com.uol.mail.api.client.dao.rest;
 
 import java.net.InetAddress;
 
@@ -22,10 +22,9 @@ import br.com.uol.mail.api.client.repository.GeolocalizationRepository;
  * 
  * @see GeolocalizationDTO
  * @see GeolocalizationRepository
- *
  */
 @Component
-public class IpVigilanteDAO implements GeolocalizationRepository {
+public class IpVigilanteDAO {
 	private static final Logger logger = LoggerFactory.getLogger(IpVigilanteDAO.class);
 	
 	@Value("${geolocalization.api.url}")
@@ -42,7 +41,6 @@ public class IpVigilanteDAO implements GeolocalizationRepository {
 		return this.baseUrl + "/json/" + ip;
 	}
 	
-	@Override
 	public GeolocalizationDTO getByIpAddress(InetAddress ipAddress) {
 		String ip = ipAddress.getHostAddress();
 		String url = this.getUrl(ip);
