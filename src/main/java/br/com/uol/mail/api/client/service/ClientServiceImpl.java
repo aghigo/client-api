@@ -20,10 +20,14 @@ import br.com.uol.mail.api.client.repository.ClientRepository;
  */
 @Service
 public class ClientServiceImpl implements ClientService {
+	private WeatherService weatherService;
+	private GeolocalizationService geolocalizationService;
 	private ClientRepository clientRepository;
 	
 	@Autowired
-	public ClientServiceImpl(ClientRepository clientRepository) {
+	public ClientServiceImpl(WeatherService weatherService, GeolocalizationService geolocalizationService, ClientRepository clientRepository) {
+		this.weatherService = weatherService;
+		this.geolocalizationService = geolocalizationService;
 		this.clientRepository = clientRepository;
 	}
 	
@@ -32,11 +36,7 @@ public class ClientServiceImpl implements ClientService {
 		List<Client> clients = this.clientRepository.getAllClients();
 		List<ClientDTO> response = new ArrayList<>();
 		for(Client client : clients) {
-			ClientDTO dto = ClientDTO.builder()
-					.name(client.getName())
-					.email(client.getEmail())
-					.age(client.getAge())
-					.build();
+			ClientDTO dto = new ClientDTO(client.getName(), client.getEmail(), client.getAge());
 			response.add(dto);
 		}
 		return Collections.unmodifiableList(response);
@@ -45,7 +45,7 @@ public class ClientServiceImpl implements ClientService {
 	@Override
 	public ClientDTO getClientById(Long id) throws ClientNotFoundException {
 		Client client = this.clientRepository.findById(id).orElseThrow(() -> new ClientNotFoundException(id));
-		return ClientDTO.builder().name(client.getName()).email(client.getEmail()).age(client.getAge()).build();
+		return new ClientDTO(client.getName(), client.getEmail(), client.getAge());
 	}
 
 	@Override
@@ -53,7 +53,11 @@ public class ClientServiceImpl implements ClientService {
 		if(this.clientRepository.findByEmail(request.getEmail()).isPresent()) {
 			throw new ClientAlreadyExistsException("Client with e-mail address '" + request.getEmail() + "' already exists");
 		}
-		Client client = Client.builder().name(request.getName()).email(request.getEmail()).age(request.getAge()).build();
+		
+		Client client = new Client();
+		client.setName(request.getName());
+		client.setEmail(request.getEmail());
+		client.setAge(request.getAge());
 		this.clientRepository.save(client);
 	}
 	

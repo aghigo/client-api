@@ -27,7 +27,13 @@ import br.com.uol.mail.api.client.repository.ClientRepository;
 @SpringBootTest(classes = TestConfig.class, webEnvironment = WebEnvironment.RANDOM_PORT)
 public class ClientServiceImplTest {
 	@Mock
-	private ClientRepository repository;
+	private ClientRepository clientRepository;
+	
+	@Mock
+	private GeolocalizationService geolocalizationService;
+	
+	@Mock
+	private WeatherService weaterService;
 	
 	private ClientServiceImpl service;
 	
@@ -36,21 +42,21 @@ public class ClientServiceImplTest {
 	@Before
 	public void initMocks() {
 		MockitoAnnotations.initMocks(this);
-		this.service = new ClientServiceImpl(this.repository);
+		this.service = new ClientServiceImpl(this.weaterService, this.geolocalizationService, this.clientRepository);
 	}
 	
 	@Test
 	public void getAllClients_shouldReturnListOfClients() {
-		Client johnDoe = Client.builder().id(1L).name("john doe").email("john.doe@gmail.com").age(20).build();
-		Client client1 = Client.builder().id(2L).name("test").email("test@gmail.com").age(32).build();
+		Client johnDoe = new Client(1L, "john doe", "john.doe@gmail.com", 20);
+		Client client1 = new Client(1L, "test", "test@gmail.com", 32);
 		this.mockedClients = new ArrayList<>();
 		this.mockedClients.add(johnDoe);
 		this.mockedClients.add(client1);
-		Mockito.doReturn(this.mockedClients).when(this.repository).getAllClients();
+		Mockito.doReturn(this.mockedClients).when(this.clientRepository).getAllClients();
 		
 		List<ClientDTO> clients = this.service.getAllClients();
 		
-		Mockito.verify(this.repository, times(1)).getAllClients();
+		Mockito.verify(this.clientRepository, times(1)).getAllClients();
 		Assert.assertNotNull(clients);
 		Assert.assertEquals(2, clients.size());
 		
@@ -70,18 +76,18 @@ public class ClientServiceImplTest {
 	@Test(expected = ClientNotFoundException.class)
 	public void getClientById_whenNoClientFound_ShouldThrowException() throws ClientNotFoundException {
 		try {
-			Mockito.doReturn(Optional.empty()).when(this.repository).findById(Mockito.anyLong());
+			Mockito.doReturn(Optional.empty()).when(this.clientRepository).findById(Mockito.anyLong());
 			this.service.getClientById(1L);
 		} catch (ClientNotFoundException e) {
-			Mockito.verify(this.repository, times(1)).findById(Mockito.anyLong());
+			Mockito.verify(this.clientRepository, times(1)).findById(Mockito.anyLong());
 			throw e;
 		}
 	}
 	
 	@Test
 	public void getClientById_withClientFound_shouldReturnClient() throws ClientNotFoundException {
-		Client johnDoe = Client.builder().id(1L).name("john doe").email("john.doe@gmail.com").age(20).build();
-		Mockito.doReturn(Optional.of(johnDoe)).when(this.repository).findById(Mockito.anyLong());
+		Client johnDoe = new Client(1L, "john doe", "john.doe@gmail.com", 20);
+		Mockito.doReturn(Optional.of(johnDoe)).when(this.clientRepository).findById(Mockito.anyLong());
 		ClientDTO client = this.service.getClientById(1L);
 		Assert.assertNotNull(client);
 		Assert.assertEquals("john doe", client.getName());

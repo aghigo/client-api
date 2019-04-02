@@ -5,21 +5,12 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.ToString;
+import br.com.uol.mail.api.client.entity.Client;
 
 /**
  * Immutable DTO object representation of the Client entity
  * @see Client
  */
-@Getter
-@Builder
-@ToString
-@EqualsAndHashCode
-@RequiredArgsConstructor
 public class ClientDTO {
 	@NotEmpty(message = "Name must not be empty")
 	@NotNull(message = "Name must not be null")
@@ -32,4 +23,22 @@ public class ClientDTO {
 	
 	@Positive(message = "Age should be greater than zero")
 	private final Integer age;
+	
+	public ClientDTO(String name, String email, Integer age) {
+		this.name = name;
+		this.email = email;
+		this.age = age;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public Integer getAge() {
+		return age;
+	}	
 }
