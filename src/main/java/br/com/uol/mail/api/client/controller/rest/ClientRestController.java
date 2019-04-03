@@ -2,6 +2,7 @@ package br.com.uol.mail.api.client.controller.rest;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,8 +67,10 @@ public class ClientRestController {
 	}
 	
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<Object> createClient(@RequestBody @Valid ClientDTO requestBody) {
+	public ResponseEntity<Object> createClient(@RequestBody @Valid ClientDTO requestBody, HttpServletRequest request) {
 		try {
+			String ipAddress = request.getRemoteAddr();
+			requestBody.setIpAddress(ipAddress);
 			this.clientService.createClient(requestBody);
 			return ResponseEntity.status(HttpStatus.CREATED).build();
 		} catch (ClientAlreadyExistsException e) {

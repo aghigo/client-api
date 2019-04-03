@@ -24,6 +24,8 @@ public class ClientDTO {
 	@Positive(message = "Age should be greater than zero")
 	private final Integer age;
 	
+	private String ipAddress;
+	
 	public ClientDTO(String name, String email, Integer age) {
 		this.name = name;
 		this.email = email;
@@ -40,5 +42,13 @@ public class ClientDTO {
 
 	public Integer getAge() {
 		return age;
+	}
+	
+	public String getIpAddress() {
+		return this.ipAddress;
+	}
+
+	public void setIpAddress(String ipAddress) {
+		this.ipAddress = ipAddress;
 	}	
 }

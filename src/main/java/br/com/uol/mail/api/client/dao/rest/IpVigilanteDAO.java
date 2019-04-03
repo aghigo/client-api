@@ -1,7 +1,5 @@
 package br.com.uol.mail.api.client.dao.rest;
 
-import java.net.InetAddress;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +11,7 @@ import org.springframework.web.client.RestTemplate;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import br.com.uol.mail.api.client.dao.GeolocalizationDAO;
 import br.com.uol.mail.api.client.domain.dto.GeolocalizationDTO;
 import br.com.uol.mail.api.client.repository.GeolocalizationRepository;
 
@@ -24,7 +23,7 @@ import br.com.uol.mail.api.client.repository.GeolocalizationRepository;
  * @see GeolocalizationRepository
  */
 @Component
-public class IpVigilanteDAO {
+public class IpVigilanteDAO implements GeolocalizationDAO {
 	private static final Logger logger = LoggerFactory.getLogger(IpVigilanteDAO.class);
 	
 	@Value("${geolocalization.api.url}")
@@ -41,9 +40,9 @@ public class IpVigilanteDAO {
 		return this.baseUrl + "/json/" + ip;
 	}
 	
-	public GeolocalizationDTO getByIpAddress(InetAddress ipAddress) {
-		String ip = ipAddress.getHostAddress();
-		String url = this.getUrl(ip);
+	@Override
+	public GeolocalizationDTO findByIpAddress(String ipAddress) {
+		String url = this.getUrl(ipAddress);
 		ResponseEntity<String> response = this.restTemplate.getForEntity(url, String.class);
 		if(!response.getStatusCode().is2xxSuccessful()) {
 			logger.error(response.getBody());
@@ -59,6 +58,10 @@ public class IpVigilanteDAO {
 		JsonObject data = json.get("data").getAsJsonObject();
 		Double lattitude = data.get("lattitude").getAsDouble();
 		Double longitude = data.get("longitude").getAsDouble();
-		return new GeolocalizationDTO(ipAddress, lattitude, longitude);
+		String subdivisionName =  data.get("subdivision_1_name").getAsString();
+		String continentName = data.get("continent_name").getAsString();
+		String countryName = data.get("country_name").getAsString();
+		String cityName = data.get("city_name").getAsString();
+		return new GeolocalizationDTO(ipAddress, lattitude, longitude, subdivisionName,	continentName, countryName, cityName);
 	}
 }

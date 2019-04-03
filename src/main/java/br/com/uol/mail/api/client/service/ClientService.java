@@ -41,6 +41,7 @@ public interface ClientService {
 	 * Creates a new client
 	 * 
 	 * @param client data of the client to create
+	 * @param ipAddress IP Address of the request
 	 * 
 	 * @throws ClientAlreadyExistsException if the client to be created already exists
 	 */

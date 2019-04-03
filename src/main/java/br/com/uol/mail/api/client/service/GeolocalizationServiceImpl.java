@@ -1,21 +1,45 @@
 package br.com.uol.mail.api.client.service;
 
-import java.net.InetAddress;
-
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.uol.mail.api.client.dao.GeolocalizationDAO;
 import br.com.uol.mail.api.client.domain.dto.GeolocalizationDTO;
+import br.com.uol.mail.api.client.entity.Geolocalization;
+import br.com.uol.mail.api.client.entity.GeolocalizationId;
 import br.com.uol.mail.api.client.repository.GeolocalizationRepository;
 
 @Service
 public class GeolocalizationServiceImpl implements GeolocalizationService {
-	@Qualifier("IpVigilanteDAO")
-	private GeolocalizationRepository geolocalizationRepository;
+	private GeolocalizationDAO geolocalizationDAO;
+	private GeolocalizationRepository geolocalizationRepository; 
+	
+	@Autowired
+	public GeolocalizationServiceImpl(GeolocalizationDAO geolocalizationDAO, GeolocalizationRepository geolocalizationRepository) {
+		this.geolocalizationDAO = geolocalizationDAO;
+		this.geolocalizationRepository = geolocalizationRepository;
+	}
 
 	@Override
-	public GeolocalizationDTO getByIpAddress(InetAddress ipAddress) {
-		// TODO Auto-generated method stub
-		return null;
+	public GeolocalizationDTO getByIpAddress(String ipAddress) {
+		return this.geolocalizationDAO.findByIpAddress(ipAddress);
+	}
+	
+	@Override
+	public Geolocalization saveGeolocalization(GeolocalizationDTO geolocalizationDTO) {
+		Geolocalization geolocalization = new Geolocalization();
+		
+		geolocalization.setCityName(geolocalizationDTO.getCityName());
+		geolocalization.setContinentName(geolocalizationDTO.getContinentName());
+		geolocalization.setCountryName(geolocalizationDTO.getCountryName());
+		geolocalization.setIpv4Address(geolocalizationDTO.getIpAddress());
+		geolocalization.setSubdivisionName(geolocalizationDTO.getSubdivisionName());
+		
+		GeolocalizationId coordinates = new GeolocalizationId();
+		coordinates.setLattitude(geolocalizationDTO.getLattitude());
+		coordinates.setLongitude(geolocalizationDTO.getLongitude());
+		geolocalization.setCoordinates(coordinates);
+		
+		return this.geolocalizationRepository.save(geolocalization);
 	}
 }

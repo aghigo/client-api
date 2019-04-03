@@ -1,10 +1,9 @@
 package br.com.uol.mail.api.client.service;
 
-import java.net.InetAddress;
-
 import org.springframework.stereotype.Service;
 
 import br.com.uol.mail.api.client.domain.dto.GeolocalizationDTO;
+import br.com.uol.mail.api.client.entity.Geolocalization;
 
 /**
  * Service interface with definition of Geolocalization business rules
@@ -14,12 +13,20 @@ import br.com.uol.mail.api.client.domain.dto.GeolocalizationDTO;
 @Service
 public interface GeolocalizationService {
 	/**
-	 * Gets geolocalization data by a given IP Address
-	 * @see GeolocalizationDTO
+	 * Finds the geolocalization based on an IP Address
 	 * 
-	 * @param ipAddress the IP Address
+	 * @param ipAddress
 	 * 
-	 * @return Geolocalization data such as lattitude and longitude
+	 * @return Geolocalization data related to the IP Address
 	 */
-	GeolocalizationDTO getByIpAddress(InetAddress ipAddress);
+	GeolocalizationDTO getByIpAddress(String ipAddress);
+	
+	/**
+	 * Saves the geolocalization data
+	 * 
+	 * @param geolocalizationDTO geolocalization data to be saved
+	 * 
+	 * @return the saved geolocalization data after the operation
+	 */
+	Geolocalization saveGeolocalization(GeolocalizationDTO geolocalizationDTO);
 }

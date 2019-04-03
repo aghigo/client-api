@@ -1,5 +1,7 @@
 package br.com.uol.mail.api.client.dao.rest;
 
+import java.util.Date;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.web.client.RestTemplate;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import br.com.uol.mail.api.client.dao.WeatherDAO;
 import br.com.uol.mail.api.client.domain.dto.GeolocalizationDTO;
 import br.com.uol.mail.api.client.domain.dto.WeatherDTO;
 
@@ -19,7 +22,7 @@ import br.com.uol.mail.api.client.domain.dto.WeatherDTO;
  * {@link https://metaweather.com/api/}
  */
 @Component
-public class MetaWeatherDAO {
+public class MetaWeatherDAO implements WeatherDAO {
 	private static final Logger logger = LoggerFactory.getLogger(MetaWeatherDAO.class);
 	
 	@Value("${weather.api.url}")
@@ -42,6 +45,7 @@ public class MetaWeatherDAO {
 		return String.format(templateUrl, woeid);
 	}
 	
+	@Override
 	public WeatherDTO getWeatherByGeolocation(GeolocalizationDTO geolocation) {
 		Double lattitude = geolocation.getLattitude();
 		Double longitude = geolocation.getLongitude();
@@ -67,6 +71,7 @@ public class MetaWeatherDAO {
 		JsonObject consolidatedWeather = json.get("consolidated_weather").getAsJsonArray().get(0).getAsJsonObject();
 		Double maximumTemperature = consolidatedWeather.get("min_temp").getAsDouble();
 		Double minimumTemperature = consolidatedWeather.get("max_temp").getAsDouble();
-		return new WeatherDTO(maximumTemperature, minimumTemperature);
+		Date now = new Date();
+		return new WeatherDTO(maximumTemperature, minimumTemperature, now.getTime());
 	}
 }

@@ -8,7 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.uol.mail.api.client.domain.dto.ClientDTO;
+import br.com.uol.mail.api.client.domain.dto.GeolocalizationDTO;
+import br.com.uol.mail.api.client.domain.dto.WeatherDTO;
 import br.com.uol.mail.api.client.entity.Client;
+import br.com.uol.mail.api.client.entity.Geolocalization;
+import br.com.uol.mail.api.client.entity.Weather;
 import br.com.uol.mail.api.client.exceptions.ClientAlreadyExistsException;
 import br.com.uol.mail.api.client.exceptions.ClientNotFoundException;
 import br.com.uol.mail.api.client.repository.ClientRepository;
@@ -58,6 +62,16 @@ public class ClientServiceImpl implements ClientService {
 		client.setName(request.getName());
 		client.setEmail(request.getEmail());
 		client.setAge(request.getAge());
+		
+		String ipAddress = request.getIpAddress();
+		if(ipAddress != null && ipAddress.trim().isEmpty()) {
+			GeolocalizationDTO geolocalizationDTO = this.geolocalizationService.getByIpAddress(ipAddress);
+			Geolocalization geolocalization = this.geolocalizationService.saveGeolocalization(geolocalizationDTO);
+			WeatherDTO weatherDTO = this.weatherService.findByGeolocalization(geolocalizationDTO);
+			Weather weather = this.weatherService.saveWeatherByGeolocalization(weatherDTO, geolocalization);
+			client.setWeatherWhenCreated(weather);
+		}
+		
 		this.clientRepository.save(client);
 	}
 	
