@@ -1,6 +1,5 @@
-<<<<<<< HEAD
-# desafio-uol
-Desafio do processo seletivo para a UOL
+
+# client-api
 
 # Premissas
 
@@ -32,6 +31,3 @@ Junto com o código é necessário entregar uma documentação que contenha os i
 - Qualquer infraestrutura adicional necessária para executar, testar, empacotar e entregar seu projeto
 - Como executar, testar, empacotar e entregar o seu projeto
 - Instruções para como montar o ambiente de produção onde seus serviços devem ser executados (preferencialmente citando ferramentas e processos)
-=======
-# client-api
->>>>>>> d0a6e948a14d32f2a5b49c790ae6f8bd6f3b54f2
