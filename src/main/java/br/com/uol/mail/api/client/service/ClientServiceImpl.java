@@ -53,26 +53,31 @@ public class ClientServiceImpl implements ClientService {
 	}
 
 	@Override
-	public void createClient(ClientDTO request) throws ClientAlreadyExistsException {
-		if(this.clientRepository.findByEmail(request.getEmail()).isPresent()) {
-			throw new ClientAlreadyExistsException("Client with e-mail address '" + request.getEmail() + "' already exists");
+	public ClientDTO createClient(ClientDTO clientRequest) throws ClientAlreadyExistsException {
+		if(this.clientRepository.findByEmail(clientRequest.getEmail()).isPresent()) {
+			throw new ClientAlreadyExistsException("Client with e-mail address '" + clientRequest.getEmail() + "' already exists");
 		}
 		
 		Client client = new Client();
-		client.setName(request.getName());
-		client.setEmail(request.getEmail());
-		client.setAge(request.getAge());
+		client.setName(clientRequest.getName());
+		client.setEmail(clientRequest.getEmail());
+		client.setAge(clientRequest.getAge());
 		
-		String ipAddress = request.getIpAddress();
+		String ipAddress = clientRequest.getIpAddress();
 		if(ipAddress != null && ipAddress.trim().isEmpty()) {
 			GeolocalizationDTO geolocalizationDTO = this.geolocalizationService.getByIpAddress(ipAddress);
 			Geolocalization geolocalization = this.geolocalizationService.saveGeolocalization(geolocalizationDTO);
 			WeatherDTO weatherDTO = this.weatherService.findByGeolocalization(geolocalizationDTO);
 			Weather weather = this.weatherService.saveWeatherByGeolocalization(weatherDTO, geolocalization);
 			client.setWeatherWhenCreated(weather);
+			weatherDTO.setGeolocalization(geolocalizationDTO);
+			clientRequest.setWheaterWhenCreated(weatherDTO);
 		}
 		
-		this.clientRepository.save(client);
+		client = this.clientRepository.save(client);
+		clientRequest.setId(client.getId());
+		
+		return clientRequest;
 	}
 	
 	@Override

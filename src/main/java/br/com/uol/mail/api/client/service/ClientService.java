@@ -43,9 +43,11 @@ public interface ClientService {
 	 * @param client data of the client to create
 	 * @param ipAddress IP Address of the request
 	 * 
+	 * @return The created client data
+	 * 
 	 * @throws ClientAlreadyExistsException if the client to be created already exists
 	 */
-	void createClient(ClientDTO request) throws ClientAlreadyExistsException;
+	ClientDTO createClient(ClientDTO request) throws ClientAlreadyExistsException;
 	
 	/**
 	 * Updates a client with a specific id

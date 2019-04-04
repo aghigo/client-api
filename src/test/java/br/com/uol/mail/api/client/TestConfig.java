@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 @ComponentScan(basePackages = {
 		"br.com.uol.mail.api.client", 
 		"br.com.uol.mail.api.client.controller.rest",
+		"br.com.uol.mail.api.client.dao",
 		"br.com.uol.mail.api.client.dao.rest",
 		"br.com.uol.mail.api.client.domain.dto",
 		"br.com.uol.mail.api.client.entity",

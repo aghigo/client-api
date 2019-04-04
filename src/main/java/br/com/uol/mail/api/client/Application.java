@@ -15,6 +15,7 @@ import org.springframework.web.client.RestTemplate;
 @ComponentScan(basePackages= { 
 		"br.com.uol.mail.api.client", 
 		"br.com.uol.mail.api.client.controller.rest",
+		"br.com.uol.mail.api.client.dao",
 		"br.com.uol.mail.api.client.dao.rest",
 		"br.com.uol.mail.api.client.domain.dto",
 		"br.com.uol.mail.api.client.entity",
@@ -25,14 +26,14 @@ import org.springframework.web.client.RestTemplate;
 @EntityScan(basePackages = "br.com.uol.mail.api.client.entity")
 @EnableJpaRepositories(basePackages = "br.com.uol.mail.api.client.repository")
 @SpringBootApplication
-public class ClientApiApplication extends SpringBootServletInitializer {
+public class Application extends SpringBootServletInitializer {
 	@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-		return application.sources(ClientApiApplication.class);
+		return application.sources(Application.class);
 	}
 
 	public static void main(String[] args) {
-		SpringApplication.run(ClientApiApplication.class, args);
+		SpringApplication.run(Application.class, args);
 	}
 	
 	@Bean

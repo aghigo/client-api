@@ -1,5 +1,7 @@
 package br.com.uol.mail.api.client.domain.dto;
 
+import java.util.Objects;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -12,6 +14,8 @@ import br.com.uol.mail.api.client.entity.Client;
  * @see Client
  */
 public class ClientDTO {
+	private Long id;
+	
 	@NotEmpty(message = "Name must not be empty")
 	@NotNull(message = "Name must not be null")
 	private final String name;
@@ -26,10 +30,21 @@ public class ClientDTO {
 	
 	private String ipAddress;
 	
+	private WeatherDTO wheaterWhenCreated;
+	
 	public ClientDTO(String name, String email, Integer age) {
+		super();
 		this.name = name;
 		this.email = email;
 		this.age = age;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getName() {
@@ -43,12 +58,48 @@ public class ClientDTO {
 	public Integer getAge() {
 		return age;
 	}
-	
+
 	public String getIpAddress() {
-		return this.ipAddress;
+		return ipAddress;
 	}
 
 	public void setIpAddress(String ipAddress) {
 		this.ipAddress = ipAddress;
-	}	
+	}
+
+	public WeatherDTO getWheaterWhenCreated() {
+		return wheaterWhenCreated;
+	}
+
+	public void setWheaterWhenCreated(WeatherDTO wheaterWhenCreated) {
+		this.wheaterWhenCreated = wheaterWhenCreated;
+	}
+
+	@Override
+	public String toString() {
+		return "ClientDTO [id=" + id + ", name=" + name + ", email=" + email + ", age=" + age + ", ipAddress="
+				+ ipAddress + ", wheaterWhenCreated=" + wheaterWhenCreated + "]";
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(age, email, id, ipAddress, name, wheaterWhenCreated);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		ClientDTO other = (ClientDTO) obj;
+		return Objects.equals(age, other.age) && Objects.equals(email, other.email) && Objects.equals(id, other.id)
+				&& Objects.equals(ipAddress, other.ipAddress) && Objects.equals(name, other.name)
+				&& Objects.equals(wheaterWhenCreated, other.wheaterWhenCreated);
+	}
 }
